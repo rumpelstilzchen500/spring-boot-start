@@ -2,8 +2,10 @@ package com.rumpel.controller;
 
 
 import com.rumpel.model.Message;
+import com.rumpel.model.User;
 import com.rumpel.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,10 +33,11 @@ public class MainController {
     }
 
     @PostMapping("/main/add")
-    public String add(@RequestParam String text,
+    public String add(@AuthenticationPrincipal User user,
+                      @RequestParam String text,
                       @RequestParam String tag,
                       Map<String, Object> model) {
-        Message message = new Message(text, tag);
+        Message message = new Message(text, tag, user);
 
         messageRepo.save(message);
 
